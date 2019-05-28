@@ -20,7 +20,7 @@ app.get('/api/courses', (req, res) => {
 
 app.get('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    
+
     if (!course) res.status(404).send('The course with the given id was not found') //404
     res.send(course);
 });
@@ -44,5 +44,5 @@ app.post('/api/courses', [check('name').isLength({min: 3})], (req, res) => {
 });
 
 //PORT
-const port = process.env.PORT || 2375;
+const port = process.env.PORT || 80;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
