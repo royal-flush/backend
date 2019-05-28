@@ -44,5 +44,5 @@ app.post('/api/courses', [check('name').isLength({min: 3})], (req, res) => {
 });
 
 //PORT
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2375;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

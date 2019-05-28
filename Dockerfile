@@ -9,5 +9,5 @@ RUN yarn
 COPY . /app
 CMD node index.js
 
-EXPOSE 3001
+EXPOSE 2375
 
