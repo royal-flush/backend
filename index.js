@@ -15,7 +15,7 @@ con.connect(function(err) {
   if (err) console.log("Error!!!!!");
   else{
     console.log("Connected!");
-    var usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirtsName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, Resume VARCHAR(255))";
+    var usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirtsName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, Resume VARCHAR(255), Image VARCHAR(255))";
     var adminsql = "CREATE TABLE IF NOT EXISTS Admin (AdminID INT NOT NULL AUTO_INCREMENT, Organization VARCHAR(255) NOT NULL, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL)";
     var jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE, FOREIGN_KEY AdminFK(AdminID) REFERENCES Admin(AdminID))";
     var applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL, PRIMARY KEY(UserFK, JobFK), FOREIGN_KEY(UserFK) REFERENCES User(UserID), FOREIGN_KEY(JobFK) REFERENCES Job(JobID))";
@@ -37,6 +37,17 @@ con.connect(function(err) {
     });
   }
 });
+
+    var fname = "rachel";
+    var lname = "peters";
+    var email = "rachelwannpeters@gmail.com";
+    var password = "password123";
+    var queryStatement = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
+
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else console.log("1 record inserted");
+    });
 
 
 
@@ -62,6 +73,59 @@ app.get('/api/courses/:id', (req, res) => {
     if (!course) res.status(404).send('The course with the given id was not found') //404
     res.send(course);
 });
+
+app.get('/api/name', (req, res) =>{
+    const name="";
+    queryStatement = "SELECT FirstName FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else name = name + result;
+    });
+    queryStatement = "SELECT LastName FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else name = name + result;
+    });
+    res.send(name);
+
+});
+
+app.get('/api/addr', (req, res) =>{
+    queryStatement = "SELECT address FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else res.send(result);
+    });
+
+});
+
+app.get('/api/email', (req, res) =>{
+    queryStatement = "SELECT Email FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else res.send(result);
+    });
+
+});
+
+app.get('/api/number', (req, res) =>{
+    queryStatement = "SELECT PhoneContact FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else res.send(result);
+    });
+
+});
+
+app.get('/api/photo', (req, res) =>{
+    queryStatement = "SELECT Image FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else res.send(result);
+    });
+
+});
+
 
 app.post('/api/courses', [check('name').isLength({min: 3})], (req, res) => {
 
