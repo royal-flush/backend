@@ -57,7 +57,7 @@ con.connect(function(err) {
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!!");
       else console.log("1 record inserted");
-    });
+   // });
 */
 
 
