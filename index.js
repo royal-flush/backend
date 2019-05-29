@@ -1,9 +1,10 @@
 const express = require('express');
+const cors= require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator/check');
 
 app.use(express.json());
-
+app.use(cors())
 const courses = [
     { id: 1, name: 'course1'},
     { id: 2, name: 'course2'},
