@@ -35,9 +35,6 @@ con.connect(function(err) {
       if (err) throw err;
 	      else{console.log("Application Table created");}
     });
-  }
-});
-
     var fname = "rachel";
     var lname = "peters";
     var email = "rachelwannpeters@gmail.com";
@@ -48,7 +45,20 @@ con.connect(function(err) {
       if (err) console.log("Error!!!!!");
       else console.log("1 record inserted");
     });
+  }
+});
+/*
+    //var fname = "rachel";
+    //var lname = "peters";
+    var email = "rachelwannpeters@gmail.com";
+    var password = "password123";
+    var queryStatement = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
 
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!!");
+      else console.log("1 record inserted");
+    });
+*/
 
 
 app.use(express.json());
@@ -75,6 +85,8 @@ app.get('/api/courses/:id', (req, res) => {
 });
 
 app.get('/api/name', (req, res) =>{
+    
+    con	
     const name="";
     queryStatement = "SELECT FirstName FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
