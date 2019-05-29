@@ -21,19 +21,19 @@ con.connect(function(err) {
     var applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL, PRIMARY KEY(UserFK, JobFK), FOREIGN KEY(UserFK) REFERENCES User(UserID), FOREIGN KEY(JobFK) REFERENCES Job(JobID))";
     con.query(usersql, function (err, result) {
       if (err) throw err;
-      console.log("User Table created");
+	    else{console.log("User Table created");}
     });
     con.query(adminsql, function (err, result) {
       if (err) throw err;
-      console.log("Admin Table created");
+	    else{console.log("Admin Table created");}
     });
     con.query(jobsql, function (err, result) {
       if (err) throw err;
-      console.log("Job Table created");
+	    else{console.log("Job Table created");}
     });
       con.query(applicationsql, function (err, result) {
       if (err) throw err;
-      console.log("Application Table created");
+	      else{console.log("Application Table created");}
     });
   }
 });
