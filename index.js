@@ -3,6 +3,43 @@ const cors= require('cors');
 const app = express();
 const { check, validationResult } = require('express-validator/check');
 
+var mysql = require('mysql');
+var con = mysql.createConnection({
+    host: " ed1swbucn606iaz.cmdzaigiudxs.us-east-1.rds.amazonaws.com  ",
+    user: "admin",
+    password: "password123",
+    database: "users"
+});
+
+con.connect(function(err) {
+  if (err) console.log("Error!!!!!");
+  else{
+    console.log("Connected!");
+    var usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirtsName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, Resume VARCHAR(255))";
+    var adminsql = "CREATE TABLE IF NOT EXISTS Admin (AdminID INT NOT NULL AUTO_INCREMENT, Organization VARCHAR(255) NOT NULL, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL)";
+    var jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE, FOREIGN_KEY AdminFK(AdminID) REFERENCES Admin(AdminID))";
+    var applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL, PRIMARY KEY(UserFK, JobFK), FOREIGN_KEY(UserFK) REFERENCES User(UserID), FOREIGN_KEY(JobFK) REFERENCES Job(JobID))";
+    con.query(usersql, function (err, result) {
+      if (err) throw err;
+      console.log("User Table created");
+    });
+    con.query(adminsql, function (err, result) {
+      if (err) throw err;
+      console.log("Admin Table created");
+    });
+    con.query(jobsql, function (err, result) {
+      if (err) throw err;
+      console.log("Job Table created");
+    });
+      con.query(applicationsql, function (err, result) {
+      if (err) throw err;
+      console.log("Application Table created");
+    });
+  }
+});
+
+
+
 app.use(express.json());
 app.use(cors())
 const courses = [
