@@ -12,37 +12,38 @@ var con = mysql.createConnection({
 });
 
 con.connect(function(err) {
-  if (err) console.log("Error!!!!!");
+  if (err) console.log(" 1");
   else{
     console.log("Connected!");
-    var usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirtsName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Address VARCHAR(255), Password VARCHAR(255) NOT NULL, Resume VARCHAR(255), Image VARCHAR(255), PRIMARY KEY(UserID))";
+    var usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Address VARCHAR(255), Password VARCHAR(255) NOT NULL, Resume VARCHAR(255), Image VARCHAR(255), PRIMARY KEY(UserID))";
     var adminsql = "CREATE TABLE IF NOT EXISTS Admin (AdminID INT NOT NULL AUTO_INCREMENT, Organization VARCHAR(255) NOT NULL, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, PRIMARY KEY(AdminID))";
     var jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, AdminID INT NOT NULL, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE, PRIMARY KEY(JobID), FOREIGN KEY (AdminID) REFERENCES Admin(AdminID))";
     var applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL, PRIMARY KEY(UserFK, JobFK), FOREIGN KEY(UserFK) REFERENCES User(UserID), FOREIGN KEY(JobFK) REFERENCES Job(JobID))";
     con.query(usersql, function (err, result) {
       if (err) throw err;
-	    else{console.log("User Table created");}
+   else{console.log("User Table created");}
     });
     con.query(adminsql, function (err, result) {
       if (err) throw err;
-	    else{console.log("Admin Table created");}
+   else{console.log("Admin Table created");}
     });
     con.query(jobsql, function (err, result) {
       if (err) throw err;
-	    else{console.log("Job Table created");}
+   else{console.log("Job Table created");}
     });
       con.query(applicationsql, function (err, result) {
       if (err) throw err;
-	      else{console.log("Application Table created");}
+     else{console.log("Application Table created");}
     });
+
     var fname = "rachel";
     var lname = "peters";
     var email = "rachelwannpeters@gmail.com";
     var password = "password123";
-    var queryStatement = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
+    var queryStatement = "INSERT INTO User (FirtsName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
 
     con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
+      if (err) console.log(err);
       else console.log("1 record inserted");
     });
   }
@@ -85,28 +86,21 @@ app.get('/api/courses/:id', (req, res) => {
 });
 
 app.get('/api/name', (req, res) =>{
-    
-    con	
-    const name="";
-    queryStatement = "SELECT FirstName FROM User WHERE UserID=1";
+    name="";
+    queryStatement = "SELECT CONCAT(FirtsName , ' ' , LastName) AS Name FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else name = name + result;
+      if (err) console.log("Error!!!!! 3");
+      else res.send(result[0]);
+      console.log(result[0]);
     });
-    queryStatement = "SELECT LastName FROM User WHERE UserID=1";
-    con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else name = name + result;
-    });
-    res.send(name);
-
+   
 });
 
 app.get('/api/addr', (req, res) =>{
-    queryStatement = "SELECT address FROM User WHERE UserID=1";
+    queryStatement = "SELECT Address FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else res.send(result);
+      if (err) console.log("Error!!!!! 5");
+      else res.send(result[0]);
     });
 
 });
@@ -114,8 +108,8 @@ app.get('/api/addr', (req, res) =>{
 app.get('/api/email', (req, res) =>{
     queryStatement = "SELECT Email FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else res.send(result);
+      if (err) console.log("Error!!!!! 6");
+      else res.send(result[0]);
     });
 
 });
@@ -123,8 +117,8 @@ app.get('/api/email', (req, res) =>{
 app.get('/api/number', (req, res) =>{
     queryStatement = "SELECT PhoneContact FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else res.send(result);
+      if (err) console.log("Error!!!!! 7");
+      else res.send(result[0]);
     });
 
 });
@@ -132,8 +126,8 @@ app.get('/api/number', (req, res) =>{
 app.get('/api/photo', (req, res) =>{
     queryStatement = "SELECT Image FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else res.send(result);
+      if (err) console.log("Error!!!!! 8");
+      else res.send(result[0]);
     });
 
 });
