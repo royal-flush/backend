@@ -155,7 +155,8 @@ app.post('/api/login', function(req, res){
                return res.send(null);
                //console.log("Failed Login");
            }else {console.log("Successful Login");
-            res.send()
+	    
+            res.send(result[0].UserID);
            }
         }
       });
@@ -177,13 +178,17 @@ app.post('/api/adminSignup', function(req,res){
           console.log(result);
         });
         if(result.length!==1){
-
-		insert = "INSERT INTO Admin(Organization, PhoneContact, Email, Password) VALUES('" + admin + "', '" + phone + "', '" + email + "', '"+ password+"')";
+		emailv = 'TRUE';
+		insert = "INSERT INTO Admin(Organization, PhoneContact, Email, EmailVerified, Password) VALUES('" + admin + "', '" + phone + "', '" + email + "', " + emailv + ", '" + password+"')";
+		con.query(insert, function (err, result){
+		  if (err) console.log(err);
+		  else {console.log("insert Successful");
+		res.send('/admin/profile');
+		}
+		});
 	}else{ res.send("Email Already Exists");}
     }else{res.send("Emails do not match");}
 });
-
-app.post();
 
 app.post('/api/signup', function(req, res){
     let email = req.body.email;
