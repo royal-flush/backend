@@ -135,7 +135,8 @@ app.get('/api/email', (req, res) =>{
 });
 
 app.get('/api/number', (req, res) =>{
-    queryStatement = "SELECT PhoneContact FROM User WHERE UserID=1";
+    id = 1;
+    queryStatement = "SELECT PhoneContact FROM User WHERE UserID=" + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 7");
       else res.send(result[0]);
@@ -152,20 +153,52 @@ app.get('/api/photo', (req, res) =>{
 
 });
 
+app.post('/api/login', function(req, res){
+    let lEmail = req.body.email;
+    let lPassword = req.body.password;  
+    
+    loginQuery = "SELECT Password FROM User WHERE Email= '" + lEmail + "'";
+    con.query(loginQuery, function (err, result){
+      if (err) console.log(err);
+        else {
+           console.log(result);
+           if(result[0]!==lPassword){
+               return res.send("Failed Login");
+           }else res.send("Successful Login");
+        }
+    });
+});
+
+app.post('/api/signup', function(req, res){
+
+});
+
 app.post('/api/pupdate', function(req, res){
     let name = req.body.Name;
     let email = req.body.Email;
     let addr = req.body.Address;
     let phone = req.body.PhoneContact;
     let id = "1";
-
-    //console.log("name" + name +" email" + email);
-    updateSQL = "UPDATE User SET FirstName = '"+ name+ "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
-    con.query(updateSQL, function (err, result){
-      if (err) console.log(err);
-      else res.send(result[0]);
-    });
-    //req.send();
+    let arr = name.split(" ");
+    if(name!=="" && email!==""){
+    if (arr.length===1){
+        updateSQL = "UPDATE User SET FirstName = '"+ name+ "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
+    }
+    else if(arr.length===2){
+        updateSQL = "UPDATE User SET FirstName = '"+ arr[0] + "', LastName='" + arr[1] + "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
+    }
+    else {
+        name=arr[1];
+        for(i=2;i<arr.length;i++){
+            name = name + " " + arr[i];
+        }
+        updateSQL = "UPDATE User SET FirstName = '"+ arr[0] + "', MiddleName = '"+ name+ "', LastName ='" + arr[arr.length-1] + "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
+    }
+        con.query(updateSQL, function (err, result){
+          if (err) console.log(err);
+          else console.log("Profile update successful");
+        });
+    }
 });
 
 
