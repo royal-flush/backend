@@ -157,8 +157,15 @@ app.post('/api/pupdate', function(req, res){
     let email = req.body.Email;
     let addr = req.body.Address;
     let phone = req.body.PhoneContact;
+    let id = "1";
 
-    Console.log("name" + name +" email" + email);
+    //console.log("name" + name +" email" + email);
+    updateSQL = "UPDATE User SET Name ="+ name+ ", Email = " +email + ", Address = "+ addr +", PhoneContact = " + phone + "WHERE UserID = " id;
+    con.query(updateSQL, function (err, result){
+      if (err) console.log("Error!!!!! 8");
+      else res.send(result[0]);
+    });
+    
 });
 
 
