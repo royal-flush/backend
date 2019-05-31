@@ -155,7 +155,7 @@ app.post('/api/login', function(req, res){
            if(result!==lPassword){
                return res.send("Failed Login");
                console.log("Failed Login");
-           }else res.redirect("");
+           }else res.redirect("/");
         }
       });
     //redirect
