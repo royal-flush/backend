@@ -176,6 +176,7 @@ app.post('/api/signup', function(req, res){
     let lName = req.body.lname;
     let v_email = req.body.v_email;
     let dob = req.body.dob;
+console.log("req.body= " + req.body);
     //let arr = name.split("/");
     if (email === v_email){
         uniqueEmail = "SELECT * FROM User WHERE Email =' " + email + "'";
@@ -184,11 +185,12 @@ app.post('/api/signup', function(req, res){
           else console.log("DB check was successful");
         console.log(result);
         });
-        insert = "INSERT INTO User (FirstName, MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ mName + "', '" +lName+ "', STR_TO_DATE('" + dob +"','%d/%m/%Y'), '" +email + "','" + password + "')";
+        console.log.dob;
+        insert = "INSERT INTO User (FirstName, MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ mName + "', '" +lName+ "', '" + dob +"', '" +email + "','" + password + "')";
         //});
         con.query(insert, function (err, result){
           if (err) console.log(err);
-          else console.log("DB check was successful");
+          else console.log("insert Successful");
         });
    }else{res.send("Emails do not match")}
 
@@ -196,11 +198,11 @@ app.post('/api/signup', function(req, res){
 	let transporter = nodemailer.createTransport({
 	  service: 'gmail',
 	  auth: {
-	    user: 'email@gmail.com',
-	    pass: 'yourpassword'
+	    user: 'royalflush.hacktt@gmail.com',
+	    pass: 'jobsttdash'
 	  }
 	});
-	email = "'" + email + "'"
+	//email = "'" + email + "'"
 	let mailOptions = {
 	  from: 'email@gmail.com',
 	  to: email,
