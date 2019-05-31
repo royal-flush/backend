@@ -176,7 +176,7 @@ app.post('/api/signup', function(req, res){
     let lName = req.body.lname;
     let v_email = req.body.v_email;
     let dob = req.body.dob;
-    let arr = name.split("/");
+    //let arr = name.split("/");
     if (email === v_email){
         uniqueEmail = "SELECT * FROM User WHERE Email =' " + email + "'";
         con.query(uniqueEmail, function (err, result){
@@ -184,7 +184,7 @@ app.post('/api/signup', function(req, res){
           else console.log("DB check was successful");
         console.log(result);
         });
-        insert = "INSERT INTO User (FirstName,MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ MiddleName + "'" +lname+ "', STR_TO_DATE(" + dob +"','%d/%m/%Y'), '" +email + "','" + password + "')";
+        insert = "INSERT INTO User (FirstName, MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ mName + "', '" +lName+ "', STR_TO_DATE('" + dob +"','%d/%m/%Y'), '" +email + "','" + password + "')";
         //});
         con.query(insert, function (err, result){
           if (err) console.log(err);
