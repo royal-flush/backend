@@ -169,7 +169,21 @@ app.post('/api/adminSignup', function(req,res){
     let phone = req.body.phoneNumber;
     let admin = req.body.ministry;
     
+    if (email === v_email){
+        uniqueEmail = "SELECT * FROM User WHERE Email =' " + email + "'";
+        con.query(uniqueEmail, function (err, result){
+          if (err) console.log(err);
+          else console.log("DB check was successful");
+          console.log(result);
+        });
+        if(result.length!==1){
+
+		insert = "INSERT INTO Admin(Organization, PhoneContact, Email, Password) VALUES('" + admin + "', '" + phone + "', '" + email + "', '"+ password+"')";
+	}else{ res.send("Email Already Exists");}
+    }else{res.send("Emails do not match");}
 });
+
+app.post();
 
 app.post('/api/signup', function(req, res){
     let email = req.body.email;
@@ -179,47 +193,49 @@ app.post('/api/signup', function(req, res){
     let lName = req.body.lname;
     let v_email = req.body.v_email;
     let dob = req.body.dob;
-console.log("req.body= " + req.body);
+    console.log("req.body= " + req.body);
     //let arr = name.split("/");
     if (email === v_email){
         uniqueEmail = "SELECT * FROM User WHERE Email =' " + email + "'";
         con.query(uniqueEmail, function (err, result){
-          if (err) console.log(err);
-          else console.log("DB check was successful");
-        console.log(result);
+            if (err) console.log(err);
+            else console.log("DB check was successful");
+            console.log(result);
         });
         console.log.dob;
-        insert = "INSERT INTO User (FirstName, MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ mName + "', '" +lName+ "', '" + dob +"', '" +email + "','" + password + "')";
-        //});
-        con.query(insert, function (err, result){
-          if (err) console.log(err);
-          else console.log("insert Successful");
-        });
-   }else{res.send("Emails do not match")}
+        if (result.length!==1){
+		insert = "INSERT INTO User (FirstName, MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ mName + "', '" +lName+ "', '" + dob +"', '" +email + "','" + password + "')";
+		//});
+		con.query(insert, function (err, result){
+		  if (err) console.log(err);
+		  else console.log("insert Successful");
+		});
+	   
 
-    
-	let transporter = nodemailer.createTransport({
-	  service: 'gmail',
-	  auth: {
-	    user: 'royalflush.hacktt@gmail.com',
-	    pass: 'jobsttdash'
-	  }
-	});
-	//email = "'" + email + "'"
-	let mailOptions = {
-	  from: 'email@gmail.com',
-	  to: email,
-	  subject: 'Sending Email using Node.js',
-	  text: 'Verify Me'
-	};
+		let transporter = nodemailer.createTransport({
+		  service: 'gmail',
+		  auth: {
+		    user: 'royalflush.hacktt@gmail.com',
+		    pass: 'jobsttdash'
+		  }
+		});
+		//email = "'" + email + "'"
+		let mailOptions = {
+		  from: 'royalflush.hacktt@gmail.com@gmail.com',
+		  to: email,
+		  subject: 'Welcome to EmployTT!',
+		  text: 'Verify Me'
+		};
 
-	transporter.sendMail(mailOptions, function(error, info){
-	  if (error) {
-	    console.log(error);
-	  } else {
-	    console.log('Email sent: ' + info.response);
-	  }
-	});  
+		transporter.sendMail(mailOptions, function(error, info){
+		  if (error) {
+		    console.log(error);
+		  } else {
+		    console.log('Email sent: ' + info.response);
+		  }
+		});
+        }else{res.send("Email Already Exists!")}
+    }else{res.send("Emails do not match.")}
 
 });
 
