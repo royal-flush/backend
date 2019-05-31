@@ -107,7 +107,7 @@ app.get('/api/courses/:id', (req, res) => {
 
 app.get('/api/name', (req, res) =>{
     name="";
-    queryStatement = "SELECT CONCAT(FirstName , ' ' , LastName) AS Name FROM User WHERE UserID=1";
+    queryStatement = "SELECT CONCAT(FirstName , ' ', MiddleName, ' ' , LastName) AS Name FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 3");
       else res.send(result[0]);
@@ -162,15 +162,45 @@ app.post('/api/login', function(req, res){
       if (err) console.log(err);
         else {
            console.log(result);
-           if(result[0]!==lPassword){
+           if(result!==lPassword){
                return res.send("Failed Login");
                console.log("Failed Login");
-           }else res.send("Failed Login");
+           }else res.redirect("");
         }
       });
+    //redirect
 });
 
+app.post('/api/newjob', function(req,res){
+    
+    
+});
+
+
+
 app.post('/api/signup', function(req, res){
+    let email = req.body.email;
+    let password = req.body.password;  
+    let fname = req.body.fname;
+    let mName = req.body.mname;
+    let lName = req.body.lname;
+    let v_email = req.body.v_email;
+    let dob = req.body.dob;
+    let arr = name.split("/");
+    if (email === v_email){
+        uniqueEmail = "SELECT * FROM User WHERE Email =' " + email + "'";
+        con.query(uniqueEmail, function (err, result){
+          if (err) console.log(err);
+          else console.log("DB check was successful");
+        console.log(result);
+        });
+        insert = "INSERT INTO User (FirstName,MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ MiddleName + "'" +lname+ "', STR_TO_DATE(" + dob +"','%d/%m/%Y'), '" +email + "','" + password + "')";
+        //});
+        con.query(insert, function (err, result){
+          if (err) console.log(err);
+          else console.log("DB check was successful");
+        });
+   }else{res.send("Emails do not match")}
 
 });
 
@@ -190,7 +220,7 @@ app.post('/api/pupdate', function(req, res){
     }
     else {
         name=arr[1];
-        for(i=2;i<arr.length;i++){
+        for(i=2;i<arr.length-1;i++){
             name = name + " " + arr[i];
         }
         updateSQL = "UPDATE User SET FirstName = '"+ arr[0] + "', MiddleName = '"+ name+ "', LastName ='" + arr[arr.length-1] + "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
