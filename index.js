@@ -158,14 +158,26 @@ app.post('/api/pupdate', function(req, res){
     let addr = req.body.Address;
     let phone = req.body.PhoneContact;
     let id = "1";
-
-    //console.log("name" + name +" email" + email);
-    updateSQL = "UPDATE User SET FirstName ="+ name+ ", Email = " +email + ", Address = "+ addr +", PhoneContact = " + phone + "WHERE UserID = " + id;
-    con.query(updateSQL, function (err, result){
-      if (err) console.log("Error!!!!! 8");
-      else res.send(result[0]);
-    });
-    //req.send();
+    let arr = name.split(" ");
+    if(name!=="" && email!==""){
+    if (arr.length===1){
+        updateSQL = "UPDATE User SET FirstName = '"+ name+ "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
+    }
+    else if(arr.length===2){
+        updateSQL = "UPDATE User SET FirstName = '"+ arr[0] + "', LastName='" + arr[1] + "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
+    }
+    else {
+        name=arr[1];
+        for(i=2;i<arr.length;i++){
+            name = name + " " + arr[i];
+        }
+        updateSQL = "UPDATE User SET FirstName = '"+ arr[0] + "', MiddleName = '"+ name+ "', LastName ='" + arr[arr.length-1] + "', Email = '" +email + "', Address = '"+ addr +"', PhoneContact = '" + phone + "' WHERE UserID = " + id + ";";
+    }
+        con.query(updateSQL, function (err, result){
+          if (err) console.log(err);
+          else console.log("Profile update successful");
+        });
+    }
 });
 
 
