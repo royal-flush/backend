@@ -152,10 +152,10 @@ app.post('/api/login', function(req, res){
       if (err) console.log(err);
         else {
            console.log(result);
-           if(result!==lPassword){
+           if(result[0].Password!==lPassword){
                return res.send("Failed Login");
                console.log("Failed Login");
-           }else res.redirect("");
+           }else res.redirect("/user/profile");
         }
       });
     //redirect
@@ -165,8 +165,6 @@ app.post('/api/createjob', function(req,res){
     
     
 });
-
-
 
 app.post('/api/signup', function(req, res){
     let email = req.body.email;
