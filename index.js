@@ -135,7 +135,8 @@ app.get('/api/email', (req, res) =>{
 });
 
 app.get('/api/number', (req, res) =>{
-    queryStatement = "SELECT PhoneContact FROM User WHERE UserID=1";
+    id = 1;
+    queryStatement = "SELECT PhoneContact FROM User WHERE UserID=" + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 7");
       else res.send(result[0]);
@@ -149,6 +150,27 @@ app.get('/api/photo', (req, res) =>{
       if (err) console.log("Error!!!!! 8");
       else res.send(result[0]);
     });
+
+});
+
+app.post('/api/login', function(req, res){
+    let lEmail = req.body.email;
+    let lPassword = req.body.password;  
+    
+    loginQuery = "SELECT Password FROM User WHERE Email= " + lEmail ;
+    con.query(loginQuery, function (err, result){
+      if (err) console.log(err);
+        else {
+           console.log(result);
+           if(result[0]!==lPassword){
+               return res.send("Failed Login");
+           }else res.send("Successful Login");
+        }
+      });
+    }
+});
+
+app.post('/api/signup', function(req, res){
 
 });
 
