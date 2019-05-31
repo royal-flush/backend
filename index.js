@@ -1,6 +1,8 @@
 const express = require('express');
 const cors= require('cors');
 const app = express();
+const bodyParser = require('body-parser')
+
 const { check, validationResult } = require('express-validator/check');
 
 var mysql = require('mysql');
@@ -15,10 +17,33 @@ con.connect(function(err) {
   if (err) console.log(" 1");
   else{
     console.log("Connected!");
-    var usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Address VARCHAR(255), Password VARCHAR(255) NOT NULL, Resume VARCHAR(255), Image VARCHAR(255), PRIMARY KEY(UserID))";
-    var adminsql = "CREATE TABLE IF NOT EXISTS Admin (AdminID INT NOT NULL AUTO_INCREMENT, Organization VARCHAR(255) NOT NULL, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, PRIMARY KEY(AdminID))";
-    var jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, AdminID INT NOT NULL, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE, PRIMARY KEY(JobID), FOREIGN KEY (AdminID) REFERENCES Admin(AdminID))";
-    var applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL, PRIMARY KEY(UserFK, JobFK), FOREIGN KEY(UserFK) REFERENCES User(UserID), FOREIGN KEY(JobFK) REFERENCES Job(JobID))";
+    let usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Address VARCHAR(255), Password VARCHAR(255) NOT NULL, Resume VARCHAR(255), Image VARCHAR(255),PreferenceList VARCHAR(255),  LinkedInAccount VARCHAR(255), SocialMedia VARCHAR(255), PRIMARY KEY(UserID))";
+    let adminsql = "CREATE TABLE IF NOT EXISTS Admin (AdminID INT NOT NULL AUTO_INCREMENT, Organization VARCHAR(255) NOT NULL, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, PRIMARY KEY(AdminID))";
+    let jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, AdminID INT NOT NULL, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE,JobFieldList VARCHAR(255), PRIMARY KEY(JobID), FOREIGN KEY (AdminID) REFERENCES Admin(AdminID))";
+    let applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL,SupportingDocumentList VARCHAR(255), PRIMARY KEY(UserFK, JobFK), FOREIGN KEY(UserFK) REFERENCES User(UserID), FOREIGN KEY(JobFK) REFERENCES Job(JobID))";
+
+// code to drop tables and redefine them
+    let dropapsql = "DROP TABLE IF EXISTS Application";
+    let dropusql = "DROP TABLE IF EXISTS User";
+    let dropjsql = "DROP TABLE IF EXISTS Job";
+    let dropadsql = "DROP TABLE IF EXISTS Admin";
+    con.query(dropapsql, function (err, result) {
+      if (err) throw err;
+   else{console.log("Application Table Dropped");}
+    });
+    con.query(dropusql, function (err, result) {
+      if (err) throw err;
+   else{console.log("User Table dropped");}
+    });
+    con.query(dropjsql, function (err, result) {
+      if (err) throw err;
+   else{console.log("Job Table dropped");}
+    });
+    con.query(dropadsql, function (err, result) {
+      if (err) throw err;
+   else{console.log("Admin Table dropped");}
+    });
+//attempt to create the tables
     con.query(usersql, function (err, result) {
       if (err) throw err;
    else{console.log("User Table created");}
@@ -35,34 +60,25 @@ con.connect(function(err) {
       if (err) throw err;
      else{console.log("Application Table created");}
     });
-
-    var fname = "rachel";
-    var lname = "peters";
-    var email = "rachelwannpeters@gmail.com";
-    var password = "password123";
-    var queryStatement = "INSERT INTO User (FirtsName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
+/*
+    let fname = "rachel";
+    let lname = "peters";
+    let email = "rachelwannpeters@gmail.com";
+    let password = "password123";
+    let queryStatement = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
 
     con.query(queryStatement, function (err, result){
       if (err) console.log(err);
       else console.log("1 record inserted");
     });
+*/
   }
 });
-/*
-    //var fname = "rachel";
-    //var lname = "peters";
-    var email = "rachelwannpeters@gmail.com";
-    var password = "password123";
-    var queryStatement = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
 
-    con.query(queryStatement, function (err, result){
-      if (err) console.log("Error!!!!!");
-      else console.log("1 record inserted");
-    });
-*/
 
 
 app.use(express.json());
+app.use(express.urlencoded());
 app.use(cors())
 const courses = [
     { id: 1, name: 'course1'},
@@ -87,7 +103,7 @@ app.get('/api/courses/:id', (req, res) => {
 
 app.get('/api/name', (req, res) =>{
     name="";
-    queryStatement = "SELECT CONCAT(FirtsName , ' ' , LastName) AS Name FROM User WHERE UserID=1";
+    queryStatement = "SELECT CONCAT(FirstName , ' ' , LastName) AS Name FROM User WHERE UserID=1";
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 3");
       else res.send(result[0]);
@@ -130,6 +146,15 @@ app.get('/api/photo', (req, res) =>{
       else res.send(result[0]);
     });
 
+});
+
+app.post('/api/pupdate', function(req, res){
+    let name = req.body.Name;
+    let email = req.body.Email;
+    let addr = req.body.Address;
+    let phone = req.body.PhoneContact;
+
+    Console.log("name" + name +" email" + email);
 });
 
 
