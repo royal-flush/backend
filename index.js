@@ -46,7 +46,7 @@ con.connect(function(err) {
    else{console.log("Admin Table dropped");}
     });
 
-*//
+*/
 //attempt to create the tables
     con.query(usersql, function (err, result) {
       if (err) throw err;
@@ -160,12 +160,12 @@ app.post('/api/pupdate', function(req, res){
     let id = "1";
 
     //console.log("name" + name +" email" + email);
-    updateSQL = "UPDATE User SET Name ="+ name+ ", Email = " +email + ", Address = "+ addr +", PhoneContact = " + phone + "WHERE UserID = " id;
+    updateSQL = "UPDATE User SET FirstName ="+ name+ ", Email = " +email + ", Address = "+ addr +", PhoneContact = " + phone + "WHERE UserID = " + id;
     con.query(updateSQL, function (err, result){
       if (err) console.log("Error!!!!! 8");
       else res.send(result[0]);
     });
-    
+    //req.send();
 });
 
 
