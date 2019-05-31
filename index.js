@@ -146,22 +146,28 @@ app.post('/api/login', function(req, res){
     let lEmail = req.body.email;
     let lPassword = req.body.password;  
     
-    loginQuery = "SELECT Password FROM User WHERE Email = '" + lEmail + "'" ;
+    loginQuery = "SELECT UserID, Password FROM User WHERE Email = '" + lEmail + "'" ;
     con.query(loginQuery, function (err, result){
       if (err) console.log(err);
         else {
            console.log(result);
            if(result[0].Password!==lPassword){
-               return res.send("Failed Login");
-               console.log("Failed Login");
-           }else res.redirect("/user/profile");
+               return res.send(null);
+               //console.log("Failed Login");
+           }else {console.log("Successful Login");
+            res.send()
+           }
         }
       });
     //redirect
 });
 
-app.post('/api/createjob', function(req,res){
-    
+app.post('/api/adminSignup', function(req,res){
+    let email = req.body.email;
+    let password = req.body.password;
+    let v_email = req.body.v_email;
+    let phone = req.body.phoneNumber;
+    let admin = req.body.ministry;
     
 });
 
