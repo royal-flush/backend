@@ -23,6 +23,8 @@ con.connect(function(err) {
     let applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL,SupportingDocumentList VARCHAR(255), PRIMARY KEY(UserFK, JobFK), FOREIGN KEY(UserFK) REFERENCES User(UserID), FOREIGN KEY(JobFK) REFERENCES Job(JobID))";
 
 // code to drop tables and redefine them
+//
+/*
     let dropapsql = "DROP TABLE IF EXISTS Application";
     let dropusql = "DROP TABLE IF EXISTS User";
     let dropjsql = "DROP TABLE IF EXISTS Job";
@@ -43,6 +45,8 @@ con.connect(function(err) {
       if (err) throw err;
    else{console.log("Admin Table dropped");}
     });
+
+*//
 //attempt to create the tables
     con.query(usersql, function (err, result) {
       if (err) throw err;
