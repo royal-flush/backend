@@ -157,17 +157,17 @@ app.post('/api/login', function(req, res){
     let lEmail = req.body.email;
     let lPassword = req.body.password;  
     
-    loginQuery = "SELECT Password FROM User WHERE Email= " + lEmail ;
+    loginQuery = "SELECT Password FROM User WHERE Email = '" + lEmail + "'" ;
     con.query(loginQuery, function (err, result){
       if (err) console.log(err);
         else {
            console.log(result);
            if(result[0]!==lPassword){
                return res.send("Failed Login");
-           }else res.send("Successful Login");
+               console.log("Failed Login");
+           }else res.send("Failed Login");
         }
       });
-    }
 });
 
 app.post('/api/signup', function(req, res){
