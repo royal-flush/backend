@@ -2,6 +2,7 @@ const express = require('express');
 const cors= require('cors');
 const app = express();
 const bodyParser = require('body-parser')
+const nodemailer = require('nodemailer')
 
 const { check, validationResult } = require('express-validator/check');
 
@@ -64,18 +65,7 @@ con.connect(function(err) {
       if (err) throw err;
      else{console.log("Application Table created");}
     });
-/*
-    let fname = "rachel";
-    let lname = "peters";
-    let email = "rachelwannpeters@gmail.com";
-    let password = "password123";
-    let queryStatement = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES ('"+ fname+"', '"+lname+"','"+email+"','"+password+"')";
 
-    con.query(queryStatement, function (err, result){
-      if (err) console.log(err);
-      else console.log("1 record inserted");
-    });
-*/
   }
 });
 
@@ -171,7 +161,7 @@ app.post('/api/login', function(req, res){
     //redirect
 });
 
-app.post('/api/newjob', function(req,res){
+app.post('/api/createjob', function(req,res){
     
     
 });
@@ -201,6 +191,30 @@ app.post('/api/signup', function(req, res){
           else console.log("DB check was successful");
         });
    }else{res.send("Emails do not match")}
+
+    
+	let transporter = nodemailer.createTransport({
+	  service: 'gmail',
+	  auth: {
+	    user: 'email@gmail.com',
+	    pass: 'yourpassword'
+	  }
+	});
+	email = "'" + email + "'"
+	let mailOptions = {
+	  from: 'email@gmail.com',
+	  to: email,
+	  subject: 'Sending Email using Node.js',
+	  text: 'Verify Me'
+	};
+
+	transporter.sendMail(mailOptions, function(error, info){
+	  if (error) {
+	    console.log(error);
+	  } else {
+	    console.log('Email sent: ' + info.response);
+	  }
+	});  
 
 });
 
