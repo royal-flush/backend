@@ -20,11 +20,11 @@ con.connect(function(err) {
     console.log("Connected!");
     let usersql = "CREATE TABLE IF NOT EXISTS User (UserID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(255) NOT NULL, MiddleName VARCHAR(255), LastName VARCHAR(255) NOT NULL, DateOfBirth DATE, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Address VARCHAR(255), Password VARCHAR(255) NOT NULL, Resume VARCHAR(255), Image VARCHAR(255),PreferenceList VARCHAR(255),  LinkedInAccount VARCHAR(255), SocialMedia VARCHAR(255), PRIMARY KEY(UserID))";
     let adminsql = "CREATE TABLE IF NOT EXISTS Admin (AdminID INT NOT NULL AUTO_INCREMENT, Organization VARCHAR(255) NOT NULL, PhoneContact VARCHAR(255), Email VARCHAR(255) NOT NULL, EmailVerified BOOLEAN, Password VARCHAR(255) NOT NULL, PRIMARY KEY(AdminID))";
-    let jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, AdminID INT NOT NULL, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE,JobFieldList VARCHAR(255), PRIMARY KEY(JobID), FOREIGN KEY (AdminID) REFERENCES Admin(AdminID))";
+    let jobsql = "CREATE TABLE IF NOT EXISTS Job (JobID INT NOT NULL AUTO_INCREMENT, AdminID INT NOT NULL, Position VARCHAR(255) NOT NULL, Status BOOLEAN, Description VARCHAR(255) NOT NULL,PostDate DATE, CloseDate DATE,JobFieldList VARCHAR(255), PRIMARY KEY(JobID), FOREIGN KEY (AdminID) REFERENCES Admin(AdminID))";
     let applicationsql = "CREATE TABLE IF NOT EXISTS Application (UserFK INT NOT NULL, JobFK INT NOT NULL , Status VARCHAR(255) NOT NULL,SupportingDocumentList VARCHAR(255), PRIMARY KEY(UserFK, JobFK), FOREIGN KEY(UserFK) REFERENCES User(UserID), FOREIGN KEY(JobFK) REFERENCES Job(JobID))";
 
 // code to drop tables and redefine them
-//
+
 /*
     let dropapsql = "DROP TABLE IF EXISTS Application";
     let dropusql = "DROP TABLE IF EXISTS User";
@@ -67,7 +67,6 @@ con.connect(function(err) {
 
   }
 });
-
 
 
 app.use(express.json());
@@ -135,6 +134,21 @@ app.get('/api/number', (req, res) =>{
 
 app.get('/api/photo', (req, res) =>{
     queryStatement = "SELECT Image FROM User WHERE UserID=1";
+    con.query(queryStatement, function (err, result){
+      if (err) console.log("Error!!!!! 8");
+      else res.send(result[0]);
+    });
+
+});
+
+
+app.get('/api/admin/metrics', (req, res) =>{
+    let id = req.body.adminID;
+});
+
+app.get('/api/adminprofile', (req, res) =>{
+    let id = req.body.adminID;
+    queryStatement = "SELECT Organization, PhoneContact, Email,  FROM User WHERE AdminID=" + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 8");
       else res.send(result[0]);
