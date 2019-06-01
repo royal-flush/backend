@@ -191,26 +191,31 @@ app.get('/api/adminprofile', (req, res) =>{
 
 // POST
 // Params: 
-// Desc: Receives login information and attempts to verify the identity of the user
+// Desc: Receives login information and attempts to vrify the identity of the user
 //     : compares the stored passwords for the entered email address
 app.post('/api/login', function(req, res){
     let lEmail = req.body.email;
     let lPassword = req.body.password;  
     
     loginQuery = "SELECT UserID, Password FROM User WHERE Email = '" + lEmail + "'" ;
+
     con.query(loginQuery, function (err, result){
-      if (err) console.log(err);
-        else {
-           console.log(result);
-           if(result[0].Password!==lPassword){
-               return res.send(null);
-               //console.log("Failed Login");
-           }else {console.log("Successful Login");
-	    
-            res.send(result[0].UserID);
-           }
-        }
-      });
+      if (err){
+        console.log("TEST1");
+        console.log(err);
+      }else {
+        let user = result[0];
+        console.log("TEST2");
+        console.log(user["Password"], lPassword)
+        if(user["Password"] !== lPassword){
+          return res.send("Failed");
+          //console.log("Failed Login");
+        }else {
+          console.log("Successful Login");
+          res.send(user);
+      }
+    }
+  });
     //redirect
 });
 
