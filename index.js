@@ -103,10 +103,11 @@ app.get('/api/courses/:id', (req, res) => {
 
 // GET 
 // Params: 
-// Desc: Returns 
+// Desc: Returns the name of an identified user
 app.get('/api/name', (req, res) =>{
+    id = req.body.UserID;
     name="";
-    queryStatement = "SELECT CONCAT(FirstName , ' ', MiddleName, ' ' , LastName) AS Name FROM User WHERE UserID=1";
+    queryStatement = "SELECT CONCAT(FirstName , ' ', MiddleName, ' ' , LastName) AS Name FROM User WHERE UserID = " + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 3");
       else res.send(result[0]);
@@ -115,8 +116,12 @@ app.get('/api/name', (req, res) =>{
    
 });
 
+// GET 
+// Params: 
+// Desc: Returns the address of a specified user
 app.get('/api/addr', (req, res) =>{
-    queryStatement = "SELECT Address FROM User WHERE UserID=1";
+    id = req.body.UserID;
+    queryStatement = "SELECT Address FROM User WHERE UserID = " + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 5");
       else res.send(result[0]);
@@ -124,8 +129,12 @@ app.get('/api/addr', (req, res) =>{
 
 });
 
+// GET 
+// Params: 
+// Desc: Returns the email of a specified user
 app.get('/api/email', (req, res) =>{
-    queryStatement = "SELECT Email FROM User WHERE UserID=1";
+    id = req.body.UserID;
+    queryStatement = "SELECT Email FROM User WHERE UserID = " + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 6");
       else res.send(result[0]);
@@ -133,8 +142,11 @@ app.get('/api/email', (req, res) =>{
 
 });
 
+// GET 
+// Params: 
+// Desc: Returns the phone contact for a specified user
 app.get('/api/number', (req, res) =>{
-    id = 1;
+    id = req.body.UserID;
     queryStatement = "SELECT PhoneContact FROM User WHERE UserID=" + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 7");
@@ -143,8 +155,12 @@ app.get('/api/number', (req, res) =>{
 
 });
 
+// GET 
+// Params: 
+// Desc: Returns the photo from a specified user
 app.get('/api/photo', (req, res) =>{
-    queryStatement = "SELECT Image FROM User WHERE UserID=1";
+    id = req.body.UserID;
+    queryStatement = "SELECT Image FROM User WHERE UserID = "+ id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 8");
       else res.send(result[0]);
@@ -153,10 +169,16 @@ app.get('/api/photo', (req, res) =>{
 });
 
 
+// GET 
+// Params: 
+// Desc: Returns
 app.get('/api/admin/metrics', (req, res) =>{
     let id = req.body.adminID;
 });
 
+// GET 
+// Params: 
+// Desc: Returns the db record information for an admin
 app.get('/api/adminprofile', (req, res) =>{
     let id = req.body.adminID;
     queryStatement = "SELECT Organization, PhoneContact, Email,  FROM User WHERE AdminID=" + id;
@@ -167,6 +189,9 @@ app.get('/api/adminprofile', (req, res) =>{
 
 });
 
+// POST
+// Params: 
+// Desc: Receives login information and attempts to verify the identity of the user
 app.post('/api/login', function(req, res){
     let lEmail = req.body.email;
     let lPassword = req.body.password;  
@@ -188,6 +213,9 @@ app.post('/api/login', function(req, res){
     //redirect
 });
 
+// GET 
+// Params: 
+// Desc: Returns
 app.post('/api/adminSignup', function(req,res){
     let email = req.body.email;
     let password = req.body.password;
