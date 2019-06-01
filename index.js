@@ -104,8 +104,9 @@ app.get('/api/courses/:id', (req, res) => {
 // GET 
 // Params: 
 // Desc: Returns the name of an identified user
-app.get('/api/name', (req, res) =>{
-    id = req.body.UserID;
+app.post('/api/name', (req, res) =>{
+    id = req.body.UID;
+    console.log(req);
     name="";
     queryStatement = "SELECT CONCAT(FirstName , ' ', MiddleName, ' ' , LastName) AS Name FROM User WHERE UserID = " + id;
     con.query(queryStatement, function (err, result){
@@ -119,8 +120,8 @@ app.get('/api/name', (req, res) =>{
 // GET 
 // Params: 
 // Desc: Returns the address of a specified user
-app.get('/api/addr', (req, res) =>{
-    id = req.body.UserID;
+app.post('/api/addr', (req, res) =>{
+    id = req.body.UID;
     queryStatement = "SELECT Address FROM User WHERE UserID = " + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 5");
@@ -132,8 +133,8 @@ app.get('/api/addr', (req, res) =>{
 // GET 
 // Params: 
 // Desc: Returns the email of a specified user
-app.get('/api/email', (req, res) =>{
-    id = req.body.UserID;
+app.post('/api/email', (req, res) =>{
+    id = req.body.UID;
     queryStatement = "SELECT Email FROM User WHERE UserID = " + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 6");
@@ -145,8 +146,8 @@ app.get('/api/email', (req, res) =>{
 // GET 
 // Params: 
 // Desc: Returns the phone contact for a specified user
-app.get('/api/number', (req, res) =>{
-    id = req.body.UserID;
+app.post('/api/number', (req, res) =>{
+    id = req.body.UID;
     queryStatement = "SELECT PhoneContact FROM User WHERE UserID=" + id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 7");
@@ -158,8 +159,8 @@ app.get('/api/number', (req, res) =>{
 // GET 
 // Params: 
 // Desc: Returns the photo from a specified user
-app.get('/api/photo', (req, res) =>{
-    id = req.body.UserID;
+app.post('/api/photo', (req, res) =>{
+    id = req.body.UID;
     queryStatement = "SELECT Image FROM User WHERE UserID = "+ id;
     con.query(queryStatement, function (err, result){
       if (err) console.log("Error!!!!! 8");
@@ -191,26 +192,27 @@ app.get('/api/adminprofile', (req, res) =>{
 
 // POST
 // Params: 
-// Desc: Receives login information and attempts to verify the identity of the user
+// Desc: Receives login information and attempts to vrify the identity of the user
 //     : compares the stored passwords for the entered email address
 app.post('/api/login', function(req, res){
     let lEmail = req.body.email;
     let lPassword = req.body.password;  
     
-    loginQuery = "SELECT UserID, Password FROM User WHERE Email = '" + lEmail + "'" ;
+    loginQuery = "SELECT UserID, Password, Email FROM User WHERE Email = '" + lEmail + "'" ;
+
     con.query(loginQuery, function (err, result){
-      if (err) console.log(err);
-        else {
-           console.log(result);
-           if(result[0].Password!==lPassword){
-               res.send(null);
-               //console.log("Failed Login");
-           }else {console.log("Successful Login");
-	    
-            res.send(result[0].UserID);
-           }
-        }
-      });
+      if (err){
+        console.log(err);
+      }else {
+        let user = result[0];
+        if(user["Password"] !== lPassword){
+          return res.send("Failed");
+        }else {
+          console.log("Successful Login");
+          res.send(user);
+      }
+    }
+  });
     //redirect
 });
 
@@ -466,5 +468,5 @@ app.post('/api/courses', [check('name').isLength({min: 3})], (req, res) => {
 });
 
 //PORT
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 100;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
