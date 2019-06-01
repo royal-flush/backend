@@ -2,6 +2,7 @@
 
 ## About
 This repo contains the code for a Node.js backend to facilitate the calls from the JobsTT frontend. This backend returns data from and enters data into a database.
+The Project Report for this can be found [here](./Project_Report.pdf).
 
 ## Documentation
 The full documentation for this backend detailing each of the api calls can be found [here in this Postman link](https://documenter.getpostman.com/view/4777384/S1TVXdcB).
