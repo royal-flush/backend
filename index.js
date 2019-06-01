@@ -207,7 +207,7 @@ app.post('/api/login', function(req, res){
                //console.log("Failed Login");
            }else {console.log("Successful Login");
 	    
-            res.send(result[0].UserID);
+            return res.send(result[0].UserID);
            }
         }
       });
