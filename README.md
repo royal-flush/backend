@@ -11,3 +11,15 @@ To install, run the following command in the project directory
 ```
 yarn
 ```
+
+## Running
+To run the backend, run the following command
+```
+node index.js
+```
+or
+```
+nodemon index.js
+```
+This runs the node server using [Nodemon](https://www.npmjs.com/package/nodemon) (Node Monitor) which allows the node server to listen for changes while coding then restarts the server when changes are saved.
+

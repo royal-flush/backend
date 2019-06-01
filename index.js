@@ -77,21 +77,21 @@ const courses = [
     { id: 3, name: 'course3'},
 ];
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns 'Hello World!'
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns all courses
 app.get('/api/courses', (req, res) => {
     res.send(courses);
 });
 
-// GET 
+// GET
 // Params: id
 // Desc: Returns the course with the given ID from the parameter
 app.get('/api/courses/:id', (req, res) => {
@@ -101,8 +101,8 @@ app.get('/api/courses/:id', (req, res) => {
     res.send(course);
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns the name of an identified user
 app.post('/api/name', (req, res) =>{
     id = req.body.UID;
@@ -114,11 +114,11 @@ app.post('/api/name', (req, res) =>{
       else res.send(result[0]);
       console.log(result[0]);
     });
-   
+
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns the address of a specified user
 app.post('/api/addr', (req, res) =>{
     id = req.body.UID;
@@ -130,8 +130,8 @@ app.post('/api/addr', (req, res) =>{
 
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns the email of a specified user
 app.post('/api/email', (req, res) =>{
     id = req.body.UID;
@@ -143,8 +143,8 @@ app.post('/api/email', (req, res) =>{
 
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns the phone contact for a specified user
 app.post('/api/number', (req, res) =>{
     id = req.body.UID;
@@ -156,8 +156,8 @@ app.post('/api/number', (req, res) =>{
 
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns the photo from a specified user
 app.post('/api/photo', (req, res) =>{
     id = req.body.UID;
@@ -170,15 +170,15 @@ app.post('/api/photo', (req, res) =>{
 });
 
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns
 app.get('/api/admin/metrics', (req, res) =>{
     let id = req.body.adminID;
 });
 
-// GET 
-// Params: 
+// GET
+// Params:
 // Desc: Returns the db record information for an admin
 app.get('/api/adminprofile', (req, res) =>{
     let id = req.body.adminID;
@@ -191,7 +191,7 @@ app.get('/api/adminprofile', (req, res) =>{
 });
 
 // POST
-// Params: 
+// Params:
 // Desc: Receives login information and attempts to vrify the identity of the user
 //     : compares the stored passwords for the entered email address
 app.post('/api/login', function(req, res){
@@ -217,7 +217,7 @@ app.post('/api/login', function(req, res){
 });
 
 // POST
-// Params: 
+// Params:
 // Desc: Allows an admin to signup for an account ensuring no duplicate email can be used
 app.post('/api/adminSignup', function(req,res){
     let email = req.body.email;
@@ -225,7 +225,7 @@ app.post('/api/adminSignup', function(req,res){
     let v_email = req.body.v_email;
     let phone = req.body.phoneNumber;
     let admin = req.body.ministry;
-    
+
     if (email === v_email){
         uniqueEmail = "SELECT * FROM User WHERE Email =' " + email + "'";
         con.query(uniqueEmail, function (err, result){
@@ -247,7 +247,7 @@ app.post('/api/adminSignup', function(req,res){
 });
 
 // POST
-// Params: 
+// Params:
 // Desc: Captures data from body and inserts a new job in the database
 app.post('/api/admin/createjob', (req, res) => {
 
@@ -277,18 +277,18 @@ app.post('/api/admin/createjob', (req, res) => {
   let title = req.body.title;
   let cat = req.body.cat;
   let min = req.body.min;
-  
+
   let today = new Date();
   let dd = today.getDate();
 
-  let mm = today.getMonth()+1; 
+  let mm = today.getMonth()+1;
   let yyyy = today.getFullYear();
-  if(dd<10) 
+  if(dd<10)
   {
       dd='0'+dd;
-  } 
+  }
 
-  if(mm<10) 
+  if(mm<10)
   {
       mm='0'+mm;
   }
@@ -329,7 +329,7 @@ app.post('/api/admin/createjob', (req, res) => {
     'Sample Data' + "' )";
 
   console.log(insertJob);
-  
+
   con.query(insertJob, (err, result) => {
 
     if (err){
@@ -344,11 +344,11 @@ app.post('/api/admin/createjob', (req, res) => {
 });
 
 // POST
-// Params: 
+// Params:
 // Desc: Allows a Regular user to Signup for an account ensuring no duplicate email
 app.post('/api/signup', function(req, res){
     let email = req.body.email;
-    let password = req.body.password;  
+    let password = req.body.password;
     let fname = req.body.fname;
     let mName = req.body.mname;
     let lName = req.body.lname;
@@ -370,7 +370,7 @@ app.post('/api/signup', function(req, res){
 		  if (err) console.log(err);
 		  else console.log("insert Successful");
 		});
-	   
+
 
 		let transporter = nodemailer.createTransport({
 		  service: 'gmail',
@@ -430,13 +430,13 @@ app.post('/api/pupdate', function(req, res){
     }
 });
 
-// GET 
+// GET
 // Params: id
 // Desc: Returns an admin's information based on the id
 app.get('/api/admin/:id', (req, res) => {
 
   adminIdQuery = "SELECT * FROM Admin WHERE AdminId=" + req.params.id;
-  
+
   con.query(adminIdQuery, function(err, result){
     if (err){
       console.log("Eror getting admin with ID:" + req.params.id);
@@ -468,5 +468,9 @@ app.post('/api/courses', [check('name').isLength({min: 3})], (req, res) => {
 });
 
 //PORT
+<<<<<<< HEAD
 const port = process.env.PORT || 100;
+=======
+const port = process.env.PORT || 8000;
+>>>>>>> 4cff2b3b36c949343f3f49ee9c3273d717f9451b
 app.listen(port, () => console.log(`Listening on port ${port}...`));
