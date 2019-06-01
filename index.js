@@ -216,7 +216,7 @@ app.post('/api/login', function(req, res){
 
 // POST
 // Params: 
-// Desc: 
+// Desc: Allows an admin to signup for an account ensuring no duplicate email can be used
 app.post('/api/adminSignup', function(req,res){
     let email = req.body.email;
     let password = req.body.password;
@@ -343,7 +343,7 @@ app.post('/api/admin/createjob', (req, res) => {
 
 // POST
 // Params: 
-// Desc: 
+// Desc: Allows a Regular user to Signup for an account ensuring no duplicate email
 app.post('/api/signup', function(req, res){
     let email = req.body.email;
     let password = req.body.password;  
@@ -398,6 +398,7 @@ app.post('/api/signup', function(req, res){
     }else{res.send("Emails do not match.")}
 
 });
+
 
 app.post('/api/pupdate', function(req, res){
     let name = req.body.Name;
