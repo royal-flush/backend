@@ -192,6 +192,7 @@ app.get('/api/adminprofile', (req, res) =>{
 // POST
 // Params: 
 // Desc: Receives login information and attempts to verify the identity of the user
+//     : compares the stored passwords for the entered email address
 app.post('/api/login', function(req, res){
     let lEmail = req.body.email;
     let lPassword = req.body.password;  
@@ -213,9 +214,9 @@ app.post('/api/login', function(req, res){
     //redirect
 });
 
-// GET 
+// POST
 // Params: 
-// Desc: Returns
+// Desc: 
 app.post('/api/adminSignup', function(req,res){
     let email = req.body.email;
     let password = req.body.password;
@@ -359,9 +360,8 @@ app.post('/api/signup', function(req, res){
             if (err) console.log(err);
             else console.log("DB check was successful");
             console.log(result);
-        });
-        console.log.dob;
-        if (result.length!==1){
+
+                if (result.length!==1){
 		insert = "INSERT INTO User (FirstName, MiddleName, LastName, DateOfBirth, Email, Password) VALUES ('"+ fname+"', '"+ mName + "', '" +lName+ "', '" + dob +"', '" +email + "','" + password + "')";
 		//});
 		con.query(insert, function (err, result){
@@ -393,6 +393,8 @@ app.post('/api/signup', function(req, res){
 		  }
 		});
         }else{res.send("Email Already Exists!")}
+        });
+
     }else{res.send("Emails do not match.")}
 
 });
