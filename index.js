@@ -203,11 +203,11 @@ app.post('/api/login', function(req, res){
         else {
            console.log(result);
            if(result[0].Password!==lPassword){
-               return res.send(null);
+               res.send(null);
                //console.log("Failed Login");
            }else {console.log("Successful Login");
 	    
-            return res.send(result[0].UserID);
+            res.send(result[0].UserID);
            }
         }
       });
