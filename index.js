@@ -1,13 +1,12 @@
-const express = require('express');
-const cors= require('cors');
-const app = express();
-const bodyParser = require('body-parser')
-const nodemailer = require('nodemailer')
+const express = require('express'); //Allows for use of express
+const cors= require('cors'); //Allows for use of Cors
+const mysql = require('mysql'); //Allows for user of MySQL
+const bodyParser = require('body-parser') //Allows for use of body-parser
+const nodemailer = require('nodemailer') //Allows for use of nodemailer
+const { check, validationResult } = require('express-validator/check'); //Allows for use of express-validtor/check
 
-const { check, validationResult } = require('express-validator/check');
-
-var mysql = require('mysql');
-var con = mysql.createConnection({
+const app = express(); // Initializes express into variable
+const con = mysql.createConnection({
     host: "ed1swbucn606iaz.cmdzaigiudxs.us-east-1.rds.amazonaws.com",
     user: "admin",
     password: "password123",
@@ -69,7 +68,6 @@ con.connect(function(err) {
 });
 
 
-
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors())
@@ -79,14 +77,23 @@ const courses = [
     { id: 3, name: 'course3'},
 ];
 
+// GET 
+// Params: 
+// Desc: Returns 'Hello World!'
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+// GET 
+// Params: 
+// Desc: Returns all courses
 app.get('/api/courses', (req, res) => {
     res.send(courses);
 });
 
+// GET 
+// Params: id
+// Desc: Returns the course with the given ID from the parameter
 app.get('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
 
@@ -94,6 +101,9 @@ app.get('/api/courses/:id', (req, res) => {
     res.send(course);
 });
 
+// GET 
+// Params: 
+// Desc: Returns 
 app.get('/api/name', (req, res) =>{
     name="";
     queryStatement = "SELECT CONCAT(FirstName , ' ', MiddleName, ' ' , LastName) AS Name FROM User WHERE UserID=1";
@@ -190,6 +200,106 @@ app.post('/api/adminSignup', function(req,res){
     }else{res.send("Emails do not match");}
 });
 
+// POST
+// Params: 
+// Desc: Captures data from body and inserts a new job in the database
+app.post('/api/admin/createjob', (req, res) => {
+
+  getLastRecord = 'SELECT JobID FROM Job ORDER BY JobID DESC LIMIT 1'
+
+  let lastID = -1;
+
+  con.query(getLastRecord, (err, result) => {
+    if (err){
+      console.log("Could not get last job!");
+      return;
+    }else{
+      if(Number.isInteger(result)){
+        console.log("Yah");
+      }else{
+        console.log("Nah");
+        console.log(result);
+        return;
+      }
+      console.log("Successfully retrived last job with id " + result);
+      let lastID = result;
+    }
+  })
+
+  let jobID = lastID;
+  let adminID = req.body.adminID;
+  let title = req.body.title;
+  let cat = req.body.cat;
+  let min = req.body.min;
+  
+  let today = new Date();
+  let dd = today.getDate();
+
+  let mm = today.getMonth()+1; 
+  let yyyy = today.getFullYear();
+  if(dd<10) 
+  {
+      dd='0'+dd;
+  } 
+
+  if(mm<10) 
+  {
+      mm='0'+mm;
+  }
+  today = yyyy+'-'+mm+'-'+dd;
+  console.log(today);
+
+  let closeDate = req.body.closeDate;
+  // let des = req.body.des;
+  // let jobLoc = req.body.jobLoc;
+  // let jobType = req.body.jobType;
+  // let exp = req.body.exp;
+  // let edu = req.body.edu;
+  // let essSkills = req.body.essSkills;
+  // let salRange = req.body.salRange;
+
+  let newJob = {
+    "jobID": jobID,
+    "title": title,
+    "cat": cat,
+    "min": min,
+    "closeDate": closeDate
+    // "des": des,
+    // "jobLoc": jobLoc,
+    // "jobType": jobType,
+    // "exp": exp,
+    // "edu": edu,
+    // "essSkills": essSkills,
+    // "salRange": salRange
+  }
+
+  insertJob = "INSERT INTO Job (AdminID, Position, Status, Description, PostDate, CloseDate, JobFieldList) VALUES ( " +
+    adminID + ", '" +
+    title + "', " +
+    1 + ", '" +
+    'Interesing Description' + "', '" +
+    today + "', '" +
+    closeDate + "', '" +
+    'Sample Data' + "' )";
+
+  console.log(insertJob);
+  
+  con.query(insertJob, (err, result) => {
+
+    if (err){
+      console.log("Could not insert new job into Job table");
+      console.log(err)
+    }else{
+      console.log("Successfully inserted new job with id " + lastID + 1);
+    }
+  })
+
+  res.send(newJob);
+});
+
+// POST
+// Params: 
+// Desc: 
 app.post('/api/signup', function(req, res){
     let email = req.body.email;
     let password = req.body.password;  
@@ -272,6 +382,24 @@ app.post('/api/pupdate', function(req, res){
     }
 });
 
+// GET 
+// Params: id
+// Desc: Returns an admin's information based on the id
+app.get('/api/admin/:id', (req, res) => {
+
+  adminIdQuery = "SELECT * FROM Admin WHERE AdminId=" + req.params.id;
+  
+  con.query(adminIdQuery, function(err, result){
+    if (err){
+      console.log("Eror getting admin with ID:" + req.params.id);
+    }else{
+      console.log("Select successful.");
+      console.log(result);
+
+      res.send(result);
+    }
+  });
+})
 
 app.post('/api/courses', [check('name').isLength({min: 3})], (req, res) => {
 
