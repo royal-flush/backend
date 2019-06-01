@@ -8,7 +8,6 @@ This backend was made with Node.js and Express along with a few more important d
 
 ## Installing
 To install, run the following command in the project directory
-
 ```
 yarn
 ```
